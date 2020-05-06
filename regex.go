@@ -182,9 +182,13 @@ func (re *Regexp) find(b []byte, n int, offset int) []int {
 	var numCaptures int32
 	numCapturesPtr := unsafe.Pointer(&numCaptures)
 
+	var region *C.OnigRegion
+	C.NewOnigRegion(&region)
+	defer C.FreeOnigRegion(region)
+
 	pos := int(C.SearchOnigRegex(
 		bytesPtr, C.int(n), C.int(offset), C.int(ONIG_OPTION_DEFAULT),
-		re.regex, re.region, re.errorInfo, (*C.char)(nil), (*C.int)(capturesPtr), (*C.int)(numCapturesPtr),
+		re.regex, region, re.errorInfo, (*C.char)(nil), (*C.int)(capturesPtr), (*C.int)(numCapturesPtr),
 	))
 
 	if pos < 0 {
@@ -219,10 +223,14 @@ func (re *Regexp) match(b []byte, n int, offset int) bool {
 		b = []byte{0}
 	}
 
+	var region *C.OnigRegion
+	C.NewOnigRegion(&region)
+	defer C.FreeOnigRegion(region)
+
 	bytesPtr := unsafe.Pointer(&b[0])
 	pos := int(C.SearchOnigRegex(
 		bytesPtr, C.int(n), C.int(offset), C.int(ONIG_OPTION_DEFAULT),
-		re.regex, re.region, re.errorInfo, nil, nil, nil,
+		re.regex, region, re.errorInfo, nil, nil, nil,
 	))
 
 	return pos >= 0

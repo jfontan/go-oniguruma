@@ -12,3 +12,7 @@ extern int MatchOnigRegex( void *str, int str_length, int offset, int option,
 extern int LookupOnigCaptureByName(char *name, int name_length, OnigRegex regex, OnigRegion *region);
 
 extern int GetCaptureNames(OnigRegex regex, void *buffer, int bufferSize, int* groupNumbers);
+
+extern int NewOnigRegion( OnigRegion **region );
+
+extern int FreeOnigRegion( OnigRegion *region );

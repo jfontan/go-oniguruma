@@ -182,3 +182,12 @@ int GetCaptureNames(OnigRegex reg, void *buffer, int bufferSize, int* groupNumbe
     return groupInfo.bufferOffset;
 }
 
+int NewOnigRegion(OnigRegion **region) {
+    *region = onig_region_new();
+    return 0;
+}
+
+int FreeOnigRegion(OnigRegion *region) {
+    onig_region_free(region, 1);
+    return 0;
+}
